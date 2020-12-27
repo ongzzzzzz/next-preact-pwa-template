@@ -1,41 +1,77 @@
-# Preact example
+# NextJS Preact PWA Template
 
-This is a fully working example of Next.js 9.5 running on [Preact](https://github.com/preactjs/preact) instead of React.
+![Google Lighthouse Performance Ranking](public/lighthouse.png)
 
-This reduces the base JavaScript weight of pages to ~22kB.
+Without Preact
+![243kB](public/next-network.png)
 
-> 🔭 In the future, this can be even smaller with some additional Webpack optimizations.
+With Preact
+![116kB](public/next-preact-network.png)
 
-## How to use
+This PWA Template is intended to be hosted on [Vercel](https://vercel.com)
 
-Clone this repo and run `npm install`:
+## Getting Started
 
-```sh
-git clone https://github.com/developit/nextjs-preact-demo.git
-cd nextjs-preact-demo
-npm install
-```
+First, run the development server:
 
-There are three commands available:
-
-```sh
-# start a development server:
+```bash
 npm run dev
-
-# create a production build:
-npm run build
-
-# start a production server:
-npm start
+# or
+yarn dev
 ```
 
-## How does it work?
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-The example takes advantage of npm/yarn aliases, which essentially allow installing `preact/compat` at `node_modules/react`.
+You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
 
-Here's how this example repo was set up:
 
-- Set up a basic Next.js app using `create-next-app`
-- Install `preact`, uninstall `react` and `react-dom`.
-- Install [preact-compat/react](https://github.com/preact-compat/react) and [preact-compat/react-dom](https://github.com/preact-compat/react-dom) for aliasing.
-- Use an [npm alias](https://github.com/npm/rfcs/blob/latest/implemented/0001-package-aliases.md#detailed-explanation) to replace `react-ssr-prepass` with `preact-ssr-prepass` (also [works](https://twitter.com/sebmck/status/873958247304232961) with Yarn).
+## Client-Side Firebase Integration
+
+You can rename the `.env` file to `.env.local` and add your credentials into it and use it in a page like so:
+
+```js
+import firebase from '../path/to/lib/firebase';
+
+firebase.firestore().collection('foo').doc('bar').get()
+.then(doc => {
+    // do stuff
+}).catch(err => console.error({ err }))
+``` 
+
+Alternatively, you can use [`useSWR`](https://github.com/vercel/swr) and query `api/my-collection` to get firebase data.
+
+```jsx
+import useSWR from 'swr'
+
+const fetcher = async (...args) => {
+    const res = await fetch(...args);
+    return res.json();
+};
+
+export default function WaitableComponent() {
+    const { data } = useSWR(`/api/my-collection`, fetcher, { refreshInterval: 6900 });
+    if (data) { return <div>{data}</div> }
+    else { return <div></div> }
+}
+```
+
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+To learn more about Preact, take a look at the following resources:
+
+- [Preact Documentation](https://preactjs.com/) - learn more about Preact and its optimization.
+- [Preact's Github Repo](https://github.com/preactjs/preact) - look at the source code of Preact.
+
+
+## Deployment
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com) from the creators of Next.js.
+
+Check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
